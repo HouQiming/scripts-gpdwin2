@@ -11,7 +11,12 @@ First you have to install Ubuntu 18 with the default user named 'a'.
 
 Then install my kernel fork at https://github.com/houqiming/linux-gpdwin2
 
-Then clone this repo to `~/`
+Then edit `/etc/default/grub` and `update-grub`:
+```
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash acpi_serialize fbcon=rotate:1 modprobe.blacklist=sdhci,cqhci,sdhci_pci,sdhci-pci,mmc_core,mmc-core module_blacklist=sdhci,cqhci,sdhci_pci,sdhci-pci,mmc_core,mmc-core i915.enable_gvt=1 kvm.ignore_msrs=1 intel_iommu=on"
+```
+
+Then copy everything from this repo to `~/`
 
 Then build qemu 2.12.0 with GTK and libusb support. Use `qemu/conf.sh` to configure it.
 
