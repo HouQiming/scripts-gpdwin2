@@ -1,5 +1,5 @@
 #!/bin/sh
-ENABLE_TRACE=true
+ENABLE_TRACE=false
 ###
 if $ENABLE_TRACE ; then
 	echo 163840 > /sys/kernel/debug/tracing/buffer_size_kb
@@ -35,6 +35,7 @@ cd /sys/kernel/config/target/
 mkdir -p core/iblock_0/block
 echo "udev_path=${DEVICE}" > core/iblock_0/block/control
 echo 1 > core/iblock_0/block/enable
+echo 1 > core/iblock_0/block/attrib/emulate_tpu
 ##
 mkdir -p usb_gadget
 cd usb_gadget

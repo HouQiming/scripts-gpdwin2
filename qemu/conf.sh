@@ -2,8 +2,8 @@
 ./configure --prefix=/usr \
     --enable-kvm \
     --disable-xen \
-    --enable-debug-info \
-    --enable-debug \
+    --disable-debug-info \
+    --enable-libusb \
     --enable-gtk \
     --enable-vhost-net \
     --disable-debug-tcg \

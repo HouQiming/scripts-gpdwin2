@@ -2,16 +2,17 @@
 # for Qemu 2.12 you should add "display=off" option when you create VM without dma-buf.
 #todo: set up better networking - right now it's qemu's default
 UUID=2aee154e-7d0d-11e8-88b8-6f45320c7162
+AUDIO_DEV=0000\:00\:1f.3
 #QEMU_AUDIO_DRV=pa
 #QEMU_PA_SERVER=/run/user/1000/pulse/native
 #QEMU_AUDIO_DRV=alsa
 #QEMU_ALSA_DAC_BUFFER_SIZE=4096
 #DISPLAY=:0
 #-soundhw hda
-modprobe vfio_pci
-AUDIO_DEV=0000\:00\:1f.3
+modprobe vfio-pci
+echo "$UUID" > /sys/bus/pci/devices/0000:00:02.0/mdev_supported_types/i915-GVTg_V5_4/create
 echo $AUDIO_DEV > /sys/bus/pci/devices/$AUDIO_DEV/driver/unbind
-#echo 0x8086 0x9d71 > /sys/bus/pci/drivers/vfio-pci/new_id
+echo `cat /sys/bus/pci/devices/$AUDIO_DEV/vendor` `cat /sys/bus/pci/devices/$AUDIO_DEV/device` > /sys/bus/pci/drivers/vfio-pci/new_id
 echo $AUDIO_DEV > /sys/bus/pci/drivers/vfio-pci/bind
 #-serial mon:stdio
 qemu-system-x86_64 \
@@ -26,7 +27,7 @@ qemu-system-x86_64 \
   \
   -bios /usr/share/qemu/OVMF.fd -enable-kvm \
   \
-  -display gtk,gl=on \
+  -display gtk,gl=on,grab_on_hover=on -full-screen\
   -vga none \
   -device vfio-pci,sysfsdev=/sys/bus/pci/devices/0000:00:02.0/$UUID,display=on,x-igd-opregion=on \
   \
@@ -40,3 +41,4 @@ qemu-system-x86_64 \
   ;
 echo $AUDIO_DEV > /sys/bus/pci/devices/$AUDIO_DEV/driver/unbind
 echo $AUDIO_DEV > /sys/bus/pci/drivers/snd_hda_intel/bind
+echo 1 > /sys/bus/pci/devices/0000:00:02.0/$UUID/remove
